@@ -1,14 +1,34 @@
+import 'package:favorite_places/models/place.dart';
+import 'package:favorite_places/providers/user_places.dart';
+import 'package:favorite_places/widgets/image_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddPlaceScreen extends StatefulWidget {
+class AddPlaceScreen extends ConsumerStatefulWidget {
   const AddPlaceScreen({super.key});
 
   @override
-  State<AddPlaceScreen> createState() => _AddPlaceScreenState();
+  ConsumerState<AddPlaceScreen> createState() => _AddPlaceScreenState();
 }
 
-class _AddPlaceScreenState extends State<AddPlaceScreen> {
+class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   final _titleController = TextEditingController();
+
+  void _savePlace() {
+    final enteredTitle = _titleController.text;
+    if (enteredTitle.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a title for the place.')),
+      );
+      return;
+    }
+      ref.read(userPlacesProvider.notifier).addPlace(
+        Place(title: enteredTitle),
+      );
+
+      Navigator.of(context).pop();
+    // Save the place using the entered title
+  }
 
   @override
   void dispose() {
@@ -29,9 +49,12 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
             TextField(
               decoration: const InputDecoration(labelText: 'Title'),
               controller: _titleController,
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 18),
             ),
             const SizedBox(height: 10),
-            ElevatedButton.icon(onPressed: (){}, label: const Text('Add Place'), icon: const Icon(Icons.add)),
+            ImageInput(),
+            const SizedBox(height: 10),
+            ElevatedButton.icon(onPressed: _savePlace, label: const Text('Add Place'), icon: const Icon(Icons.add)),
           ],
         ),
       ),
