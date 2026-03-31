@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:favorite_places/models/place.dart';
 import 'package:favorite_places/providers/user_places.dart';
 import 'package:favorite_places/widgets/image_input.dart';
@@ -13,6 +15,7 @@ class AddPlaceScreen extends ConsumerStatefulWidget {
 
 class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   final _titleController = TextEditingController();
+  File? _selectedImage;
 
   void _savePlace() {
     final enteredTitle = _titleController.text;
@@ -23,7 +26,7 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
       return;
     }
       ref.read(userPlacesProvider.notifier).addPlace(
-        Place(title: enteredTitle),
+        Place(title: enteredTitle, image: _selectedImage!), // Use the selected image or a placeholder
       );
 
       Navigator.of(context).pop();
@@ -52,7 +55,13 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
               style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 18),
             ),
             const SizedBox(height: 10),
-            ImageInput(),
+            ImageInput(
+              onPickImage: (File pickedImage) {
+                setState(() {
+                  _selectedImage = pickedImage;
+                });
+              },
+            ),
             const SizedBox(height: 10),
             ElevatedButton.icon(onPressed: _savePlace, label: const Text('Add Place'), icon: const Icon(Icons.add)),
           ],

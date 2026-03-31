@@ -18,6 +18,9 @@ class PlacesList extends StatelessWidget {
     return ListView.builder(
       itemCount: places.length,
       itemBuilder: (ctx, index) {
+        leading: CircleAvatar(
+          backgroundImage: FileImage(places[index].image),
+        );
         final place = places[index];
         return ListTile(
           // leading: CircleAvatar(

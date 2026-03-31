@@ -12,24 +12,16 @@ class PlacesDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(place.title),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              place.title,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Description',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 10),
-            Text("Description"),
-          ],
-        ),
+      body: Stack(
+        children: [
+          Image.file(
+            place.image,
+            width: double.infinity,
+            height: 250,
+            fit: BoxFit.cover,
+          ),
+          // You can add more details about the place here, such as location, description, etc.
+        ],
       ),
     );
   }
