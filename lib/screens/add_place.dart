@@ -17,17 +17,18 @@ class AddPlaceScreen extends ConsumerStatefulWidget {
 class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   final _titleController = TextEditingController();
   File? _selectedImage;
+  PlaceLocation? _selectedLocation;
 
   void _savePlace() {
     final enteredTitle = _titleController.text;
-    if (enteredTitle.isEmpty) {
+    if (enteredTitle.isEmpty || _selectedImage == null || _selectedLocation == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a title for the place.')),
+        const SnackBar(content: Text('Please enter a title and select an image and location for the place.')),
       );
       return;
     }
       ref.read(userPlacesProvider.notifier).addPlace(
-        Place(title: enteredTitle, image: _selectedImage!), // Use the selected image or a placeholder
+        Place(title: enteredTitle, image: _selectedImage!, location: _selectedLocation!), // Use the selected image or a placeholder
       );
 
       Navigator.of(context).pop();
@@ -64,7 +65,11 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
               },
             ),
             const SizedBox(height: 10),
-            const LocationInput(),
+            LocationInput(onSelectLocation: (PlaceLocation location) {
+              setState(() {
+                _selectedLocation = location;
+              });
+            }),
             const SizedBox(height: 10),
             ElevatedButton.icon(onPressed: _savePlace, label: const Text('Add Place'), icon: const Icon(Icons.add)),
           ],

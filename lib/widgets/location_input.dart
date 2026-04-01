@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class LocationInput extends StatefulWidget {
-  const LocationInput({super.key});
+  const LocationInput({super.key, required this.onSelectLocation});
+  final void Function(PlaceLocation location) onSelectLocation;
 
   @override
   State<LocationInput> createState() => _LocationInputState();
@@ -22,7 +23,7 @@ class _LocationInputState extends State<LocationInput> {
 
     final lat = _pickedLocation!.latitude;
     final lng = _pickedLocation!.longitude;
-    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$lng&key=9480250c55202799780b85649615acb250f21171e545829feeaa26910f636d99';
+    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$lng&key=AIzaSyAKscyL0uxaPHNG0u4OIQhf4n-xiFKyfV8';
   }
 
 
@@ -54,10 +55,10 @@ class _LocationInputState extends State<LocationInput> {
     });
 
     locationData = await location.getLocation();
-    final apiKey = '9480250c55202799780b85649615acb250f21171e545829feeaa26910f636d99';
+    final apiKey = 'AIzaSyAKscyL0uxaPHNG0u4OIQhf4n-xiFKyfV8';
     final lat = locationData.latitude;
     final lng = locationData.longitude;
-    final url = Uri.parse('https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=$apiKey');
+    final url = Uri.parse('https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=$apiKey');
 
     final response = await http.get(url);
     final resData = json.decode(response.body);
@@ -71,6 +72,8 @@ class _LocationInputState extends State<LocationInput> {
         address: address,
       );
     });
+
+    widget.onSelectLocation(_pickedLocation!);
   }
 
   @override

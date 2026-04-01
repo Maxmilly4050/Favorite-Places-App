@@ -18,16 +18,17 @@ class PlacesList extends StatelessWidget {
     return ListView.builder(
       itemCount: places.length,
       itemBuilder: (ctx, index) {
-      leading: CircleAvatar(
-          backgroundImage: FileImage(places[index].image),
-        );
         final place = places[index];
         return ListTile(
+          leading: CircleAvatar(
+              backgroundImage: FileImage(places[index].image),
+            ),
           // leading: CircleAvatar(
           //   backgroundImage: FileImage(place),
           // ),
-          title: Text(place.title, style: Theme.of(context).textTheme.titleMedium!.copyWith()),
+          title: Text(place.title, style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurface)),
           // subtitle: Text(place.location.address),
+          subtitle: Text(place.location!.address, style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant)),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (ctx) => PlacesDetailsScreen(place: places[index]),

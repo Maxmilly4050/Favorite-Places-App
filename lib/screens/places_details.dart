@@ -4,6 +4,12 @@ import 'package:favorite_places/models/place.dart';
 class PlacesDetailsScreen extends StatelessWidget {
   final Place place;
 
+  String get locationImage {
+    final lat = place.location!.latitude;
+    final lng = place.location!.longitude;
+    return 'https://maps.googleapis.com/maps/api/staticmap?center=$lat,$lng&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:A%7C$lat,$lng&key=AIzaSyAKscyL0uxaPHNG0u4OIQhf4n-xiFKyfV8';
+  }
+
   const PlacesDetailsScreen({super.key, required this.place});
 
   @override
@@ -17,10 +23,31 @@ class PlacesDetailsScreen extends StatelessWidget {
           Image.file(
             place.image,
             width: double.infinity,
-            height: 250,
-            fit: BoxFit.cover,
+            height: double.infinity,
+            fit: BoxFit.fill,
           ),
-          // You can add more details about the place here, such as location, description, etc.
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 70,
+                  backgroundImage: NetworkImage(locationImage),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  child: Text(
+                  place.location!.address,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.onSurface),
+                            ),
+                ),
+              ],
+            ), 
+          ),
         ],
       ),
     );
